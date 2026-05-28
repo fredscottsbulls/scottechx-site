@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admissions — ScottsTechX</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: #1e1e2e;
+      --cyan: #166534;
+      --cyan-dim: rgba(6,78,59,0.25);
+      --blue: #0080ff;
+      --purple: #a855f7;
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --green: #166534;
+      --red: #ef4444;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    #matrix-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cyan);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-logo span { color: var(--text-muted); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--cyan); }
+
+    .nav-links a.cta-btn {
+      color: var(--bg);
+      background: var(--cyan);
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      position: relative;
+      z-index: 1;
+      padding: 10rem 2rem 4rem;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -2px;
+      margin-bottom: 1rem;
+    }
+
+    .page-header h1 .accent { color: var(--cyan); }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* SECTION STYLES */
+    .section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-title .icon {
+      width: 40px;
+      height: 40px;
+      background: var(--cyan-dim);
+      border: 1px solid rgba(22,101,52,0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    /* CARDS */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: rgba(22,101,52,0.5); }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--cyan);
+    }
+
+    .card p, .card li {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card ul li {
+      padding: 0.3rem 0;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .card ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+    }
+
+    /* TIMELINE / PROCESS */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      background: var(--cyan);
+      color: var(--bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .step-content h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .step-content p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* TABLE / FEE STRUCTURE */
+    .fee-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .fee-table th {
+      background: rgba(22,101,52,0.15);
+      padding: 1rem 1.25rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .fee-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .fee-table tr:last-child td { border-bottom: none; }
+
+    .fee-table .highlight { color: var(--cyan); font-weight: 600; }
+
+    .note {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(22,101,52,0.08);
+      border: 1px solid rgba(22,101,52,0.2);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    /* FORM */
+    .form-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-group select { cursor: pointer; }
+
+    .btn-submit {
+      margin-top: 1.5rem;
+      padding: 0.85rem 2rem;
+      background: var(--cyan);
+      color: var(--bg);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover { background: #0d4a28; }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 4rem;
+    }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">ScottsTech<span>X</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="admissions.html" style="color: var(--cyan);">Admissions</a></li>
+  </ul>
+</nav>
+
+<header class="page-header">
+  <h1>Admissions — <span class="accent">ScottsTechX</span></h1>
+  <p>Begin your journey into cybersecurity and full-stack development. Review requirements, the application process, and fee structure below.</p>
+</header>
+
+<!-- REQUIREMENTS -->
+<section class="section" id="requirements">
+  <h2 class="section-title"><span class="icon">📋</span> Admission Requirements</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h3>Academic Prerequisites</h3>
+      <ul>
+        <li>Minimum 5 O-Level passes including English and Mathematics</li>
+        <li>A-Level or equivalent in relevant field preferred</li>
+        <li>Basic computer literacy (Windows/Linux operations)</li>
+        <li>Understanding of fundamental networking concepts</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Technical Background</h3>
+      <ul>
+        <li>No prior programming experience required</li>
+        <li>Familiarity with command-line interfaces is a plus</li>
+        <li>Own laptop/desktop with minimum 8GB RAM</li>
+        <li>Stable internet connection for remote components</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Language Proficiency</h3>
+      <ul>
+        <li>English reading and writing proficiency</li>
+        <li>Ability to follow technical documentation in English</li>
+        <li>Communication skills for team collaboration</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Commitment & Conduct</h3>
+      <ul>
+        <li>Dedication of 15–20 hours per week to coursework</li>
+        <li>Agreement to ethical use of knowledge</li>
+        <li>Respect for peer learning environment</li>
+        <li>Attendance at live sessions when scheduled</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="process">
+  <h2 class="section-title"><span class="icon">🔁</span> Application Process</h2>
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3>Submit Application Form</h3>
+        <p>Fill out the application form below with accurate personal, academic, and contact details. Incomplete applications will not be reviewed.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3>Document Verification</h3>
+        <p>Provide copies of your academic certificates, national ID or passport, and proof of address. Our admissions team will verify all documents within 3–5 business days.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>Entrance Assessment</h3>
+        <p>Applicants may be asked to complete a short aptitude assessment covering basic logic, problem-solving, and motivation. This is to ensure the program is a good fit for you.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3>Interview (if required)</h3>
+        <p>Shortlisted candidates will be invited for a virtual interview with the program coordinator. This is a casual conversation to discuss your goals and expectations.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <h3>Offer & Enrollment</h3>
+        <p>Successful applicants receive an offer letter via email. Upon acceptance, you will receive login credentials for the student portal and your first cohort assignment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEE STRUCTURE -->
+<section class="section" id="fees">
+  <h2 class="section-title"><span class="icon">💰</span> Fee Structure</h2>
+  <table class="fee-table">
+    <thead>
+      <tr>
+        <th>Program</th>
+        <th>Duration</th>
+        <th>Mode</th>
+        <th>Tuition</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Cybersecurity Fundamentals</td>
+        <td>12 weeks</td>
+        <td>Online</td>
+        <td class="highlight">$299</td>
+        <td class="highlight">$349</td>
+      </tr>
+      <tr>
+        <td>Full-Stack Web Development</td>
+        <td>16 weeks</td>
+        <td>Online</td>
+        <td class="highlight">$399</td>
+        <td class="highlight">$449</td>
+      </tr>
+      <tr>
+        <td>Ethical Hacking & Penetration Testing</td>
+        <td>10 weeks</td>
+        <td>Online</td>
+        <td class="highlight">$349</td>
+        <td class="highlight">$399</td>
+      </tr>
+      <tr>
+        <td>Complete Cybersecurity Bootcamp</td>
+        <td>24 weeks</td>
+        <td>Online</td>
+        <td class="highlight">$699</td>
+        <td class="highlight">$799</td>
+      </tr>
+      <tr>
+        <td>Private Mentorship (1-on-1)</td>
+        <td>8 sessions</td>
+        <td>Remote</td>
+        <td class="highlight">$499</td>
+        <td class="highlight">$499</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <strong>Note:</strong> Registration fee of $50 is included in the total for all bootcamp programs. Payment plans are available — contact admissions for installment options. All fees are in USD.
+  </div>
+</section>
+
+<!-- APPLICATION FORM -->
+<section class="section" id="apply">
+  <h2 class="section-title"><span class="icon">📝</span> Application Form</h2>
+  <div class="form-container">
+    <form id="admissionForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="firstName">First Name *</label>
+          <input type="text" id="firstName" name="firstName" placeholder="John" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name *</label>
+          <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" placeholder="john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number *</label>
+          <input type="tel" id="phone" name="phone" placeholder="+263..." required>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth *</label>
+          <input type="date" id="dob" name="dob" required>
+        </div>
+        <div class="form-group">
+          <label for="nationality">Nationality *</label>
+          <input type="text" id="nationality" name="nationality" placeholder="e.g. Zimbabwean" required>
+        </div>
+        <div class="form-group">
+          <label for="education">Highest Education Level *</label>
+          <select id="education" name="education" required>
+            <option value="" disabled selected>Select...</option>
+            <option value="o-level">O-Level / GCSE</option>
+            <option value="a-level">A-Level / equivalent</option>
+            <option value="diploma">Diploma</option>
+            <option value="bachelors">Bachelor's Degree</option>
+            <option value="masters">Master's Degree+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="program">Program of Interest *</label>
+          <select id="program" name="program" required>
+            <option value="" disabled selected>Select a program...</option>
+            <option value="cybersecurity-fundamentals">Cybersecurity Fundamentals</option>
+            <option value="fullstack-development">Full-Stack Web Development</option>
+            <option value="ethical-hacking">Ethical Hacking & Penetration Testing</option>
+            <option value="complete-bootcamp">Complete Cybersecurity Bootcamp</option>
+            <option value="private-mentorship">Private Mentorship (1-on-1)</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="experience">Prior Technical Experience (if any)</label>
+          <textarea id="experience" name="experience" placeholder="Describe any previous programming, IT support, or cybersecurity experience..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="goals">Why do you want to join ScottsTechX? *</label>
+          <textarea id="goals" name="goals" placeholder="Tell us about your career goals and what you hope to achieve..." required></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="referral">How did you hear about us?</label>
+          <select id="referral" name="referral">
+            <option value="" disabled selected>Select...</option>
+            <option value="social-media">Social Media</option>
+            <option value="friend">Friend / Word of Mouth</option>
+            <option value="search">Search Engine</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn-submit">Submit Application</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 ScottsTechX. All rights reserved. | <a href="index.html" style="color: var(--cyan); text-decoration: none;">Home</a> | <a href="about.html" style="color: var(--cyan); text-decoration: none;">About</a></p>
+</footer>
+
+<script>
+  // Matrix rain background
+  (function() {
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(10,10,15,0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#166534';
+      ctx.font = fontSize + 'px JetBrains Mono, monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 50);
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  })();
+
+  // Form submission handler
+  document.getElementById('admissionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.btn-submit');
+    btn.textContent = 'Application Submitted!';
+    btn.style.background = '#166534';
+    setTimeout(() => {
+      btn.textContent = 'Submit Application';
+      btn.style.background = '';
+      this.reset();
+    }, 3000);
+  });
+</script>
+
+</body>
+</html>

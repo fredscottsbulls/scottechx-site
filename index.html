@@ -598,9 +598,17 @@
     .float-github { background: #1e1e2e; color: var(--text); border: 1px solid var(--border); }
     .float-devto { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
 
-    @media (min-width: 769px) {
-      .floating-cta { display: flex; }
-      .floating-cta-phone { display: none; }
+@media (min-width: 769px) {
+      .floating-cta {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 1.5rem !important;
+        right: 1.5rem !important;
+        z-index: 99 !important;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .floating-cta-phone { display: none !important; }
     }
 
     @media (max-width: 480px) {

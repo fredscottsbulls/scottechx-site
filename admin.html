@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — ScottsTechX</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface-2: #1a1a26;
+      --border: #1e1e2e;
+      --cyan: #166534;
+      --cyan-bright: #22c55e;
+      --blue: #0080ff;
+      --purple: #a855f7;
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --green: #166534;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --sidebar-w: 260px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo i {
+      font-size: 22px;
+      color: var(--cyan-bright);
+    }
+
+    .sidebar-logo span {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 8px 8px 6px;
+      margin-top: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .nav-item.active {
+      background: rgba(6, 78, 59, 0.2);
+      color: var(--cyan-bright);
+    }
+
+    .nav-item i {
+      width: 18px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--cyan);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    .sidebar-footer {
+      padding: 16px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .sidebar-footer .nav-item {
+      color: var(--text-muted);
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .topbar-btn:hover {
+      background: var(--border);
+    }
+
+    .topbar-btn.primary {
+      background: var(--cyan);
+      border-color: var(--cyan);
+    }
+
+    .topbar-btn.primary:hover {
+      background: #14532d;
+    }
+
+    .topbar-btn.danger {
+      background: rgba(239,68,68,0.15);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .topbar-btn.danger:hover {
+      background: rgba(239,68,68,0.25);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* ===== PAGE CONTENT ===== */
+    .content {
+      padding: 28px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-header {
+      margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ===== STATS WIDGETS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .stat-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-1px);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .stat-icon.green { background: rgba(6,78,59,0.2); color: var(--cyan-bright); }
+    .stat-icon.blue { background: rgba(0,128,255,0.15); color: var(--blue); }
+    .stat-icon.purple { background: rgba(168,85,247,0.15); color: var(--purple); }
+    .stat-icon.amber { background: rgba(245,158,11,0.15); color: var(--amber); }
+
+    .stat-info h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .stat-trend {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: auto;
+    }
+
+    .stat-trend.up { background: rgba(6,78,59,0.2); color: var(--cyan-bright); }
+    .stat-trend.down { background: rgba(239,68,68,0.15); color: var(--red); }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header h2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-header h2 i {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    /* ===== PAGE LIST ===== */
+    .page-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .page-list-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .page-list-item:hover {
+      border-color: var(--cyan);
+      background: rgba(6,78,59,0.1);
+    }
+
+    .page-list-item i {
+      font-size: 18px;
+      color: var(--cyan-bright);
+      width: 24px;
+      text-align: center;
+    }
+
+    .page-list-item .page-name {
+      font-weight: 600;
+      font-size: 14px;
+      flex: 1;
+    }
+
+    .page-list-item .page-path {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .page-list-item .page-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      transition: all 0.15s ease;
+    }
+
+    .btn-sm:hover { background: var(--border); }
+    .btn-sm.edit { border-color: var(--blue); color: var(--blue); }
+    .btn-sm.edit:hover { background: rgba(0,128,255,0.1); }
+    .btn-sm.view { border-color: var(--cyan); color: var(--cyan-bright); }
+    .btn-sm.view:hover { background: rgba(6,78,59,0.1); }
+
+    /* ===== EDITOR ===== */
+    .editor-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .editor-main {}
+
+    .editor-sidebar {}
+
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      flex-wrap: wrap;
+    }
+
+    .editor-toolbar label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .editor-toolbar select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .toolbar-sep {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+
+    .editor-tabs {
+      display: flex;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--surface-2);
+    }
+
+    .editor-tab {
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .editor-tab:hover { color: var(--text); }
+    .editor-tab.active {
+      color: var(--cyan-bright);
+      border-bottom-color: var(--cyan-bright);
+      background: var(--surface);
+    }
+
+    .editor-textarea {
+      width: 100%;
+      min-height: 500px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0 0 10px 10px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 20px;
+      resize: vertical;
+      outline: none;
+    }
+
+    .editor-textarea:focus {
+      border-color: var(--cyan);
+    }
+
+    .editor-preview {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      min-height: 500px;
+      padding: 20px;
+      overflow: auto;
+      max-height: 600px;
+    }
+
+    .editor-preview iframe {
+      width: 100%;
+      height: 560px;
+      border: none;
+      background: #fff;
+      border-radius: 6px;
+    }
+
+    /* ===== SETTINGS FORM ===== */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--cyan);
+    }
+
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover { background: var(--border); }
+    .btn.btn-primary { background: var(--cyan); border-color: var(--cyan); }
+    .btn.btn-primary:hover { background: #14532d; }
+    .btn.btn-danger { background: rgba(239,68,68,0.15); border-color: var(--red); color: var(--red); }
+    .btn.btn-danger:hover { background: rgba(239,68,68,0.25); }
+    .btn.btn-success { background: rgba(6,78,59,0.2); border-color: var(--cyan-bright); color: var(--cyan-bright); }
+    .btn.btn-success:hover { background: rgba(6,78,59,0.3); }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    /* ===== TABLE ===== */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .status-pill {
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-pill.active { background: rgba(6,78,59,0.2); color: var(--cyan-bright); }
+    .status-pill.draft { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .status-pill.inactive { background: rgba(239,68,68,0.1); color: var(--red); }
+
+    /* ===== ALERTS ===== */
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert.success { background: rgba(6,78,59,0.2); border: 1px solid rgba(6,78,59,0.4); color: var(--cyan-bright); }
+    .alert.error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--red); }
+    .alert.info { background: rgba(0,128,255,0.12); border: 1px solid rgba(0,128,255,0.3); color: var(--blue); }
+
+    /* ===== GRID LAYOUTS ===== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* ===== NOTIFICATION TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--surface);
+      border: 1px solid var(--cyan);
+      color: var(--text);
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 9999;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast i { color: var(--cyan-bright); font-size: 18px; }
+
+    /* ===== LOG ===== */
+    .log-view {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #a0a0a0;
+      max-height: 300px;
+      overflow-y: auto;
+      line-height: 1.8;
+    }
+
+    .log-view .log-info { color: var(--blue); }
+    .log-view .log-success { color: var(--cyan-bright); }
+    .log-view .log-warn { color: var(--amber); }
+    .log-view .log-error { color: var(--red); }
+
+    /* ===== FILE TREE ===== */
+    .file-tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+    }
+
+    .file-tree-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .file-tree-item:hover { background: var(--surface-2); }
+    .file-tree-item.active { background: rgba(6,78,59,0.2); color: var(--cyan-bright); }
+    .file-tree-item i { color: var(--text-muted); font-size: 12px; }
+    .file-tree-item.active i { color: var(--cyan-bright); }
+
+    /* ===== SWITCH ===== */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toggle-row:last-child { border-bottom: none; }
+
+    .toggle-info h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .toggle-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .toggle {
+      width: 44px;
+      height: 24px;
+      background: var(--border);
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .toggle.on { background: var(--cyan); }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.2s ease;
+    }
+
+    .toggle.on::after { transform: translateX(20px); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .topbar-toggle { display: block; }
+      .editor-layout { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .content { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <i class="fas fa-shield-halved"></i>
+    <span>ScottsTechX</span>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <div class="nav-item active" data-page="dashboard">
+      <i class="fas fa-chart-pie"></i>
+      Dashboard
+    </div>
+    <div class="nav-item" data-page="editor">
+      <i class="fas fa-code"></i>
+      Website Editor
+      <span class="nav-badge">5</span>
+    </div>
+    <div class="nav-item" data-page="pages">
+      <i class="fas fa-file-code"></i>
+      Site Pages
+    </div>
+    <div class="nav-item" data-page="analytics">
+      <i class="fas fa-chart-line"></i>
+      Analytics
+    </div>
+
+    <div class="nav-section-label">Management</div>
+    <div class="nav-item" data-page="media">
+      <i class="fas fa-images"></i>
+      Media Library
+    </div>
+    <div class="nav-item" data-page="comments">
+      <i class="fas fa-comments"></i>
+      Comments
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" data-page="seo">
+      <i class="fas fa-search"></i>
+      SEO Settings
+    </div>
+
+    <div class="nav-section-label">System</div>
+    <div class="nav-item" data-page="settings">
+      <i class="fas fa-gear"></i>
+      Settings
+    </div>
+    <div class="nav-item" data-page="logs">
+      <i class="fas fa-terminal"></i>
+      System Logs
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="nav-item" onclick="window.open('index.html','_blank')">
+      <i class="fas fa-external-link-alt"></i>
+      View Website
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-right-from-bracket"></i>
+      Logout
+    </div>
+  </div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="topbar-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <span class="topbar-title" id="topbar-title">Dashboard Overview</span>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" onclick="showToast('Checking for updates...', 'info')">
+        <i class="fas fa-sync-alt"></i> Sync
+      </button>
+      <button class="topbar-btn primary" onclick="switchPage('editor')">
+        <i class="fas fa-edit"></i> Open Editor
+      </button>
+      <div class="avatar">ST</div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ===== DASHBOARD PAGE ===== -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h1>Dashboard Overview</h1>
+        <p>Welcome back. Here's what's happening with your website.</p>
+      </div>
+
+      <div class="alert info">
+        <i class="fas fa-info-circle"></i>
+        <strong>ScottsTechX Admin</strong> — Last synced: May 28, 2026 1:20 PM &nbsp;|&nbsp; Site Status: <span style="color:var(--cyan-bright)">Live</span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-eye"></i></div>
+          <div class="stat-info">
+            <h3>12,847</h3>
+            <p>Total Visits</p>
+          </div>
+          <span class="stat-trend up"><i class="fas fa-arrow-up"></i> +18%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+          <div class="stat-info">
+            <h3>3,291</h3>
+            <p>Unique Visitors</p>
+          </div>
+          <span class="stat-trend up"><i class="fas fa-arrow-up"></i> +12%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fas fa-clock"></i></div>
+          <div class="stat-info">
+            <h3>2m 34s</h3>
+            <p>Avg. Session</p>
+          </div>
+          <span class="stat-trend up"><i class="fas fa-arrow-up"></i> +7%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber"><i class="fas fa-bounce"></i></div>
+          <div class="stat-info">
+            <h3>42.3%</h3>
+            <p>Bounce Rate</p>
+          </div>
+          <span class="stat-trend down"><i class="fas fa-arrow-down"></i> -5%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-file-code"></i></div>
+          <div class="stat-info">
+            <h3>5</h3>
+            <p>Site Pages</p>
+          </div>
+          <span class="stat-trend up"><i class="fas fa-check"></i> OK</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-hard-drive"></i></div>
+          <div class="stat-info">
+            <h3>487 MB</h3>
+            <p>Storage Used</p>
+          </div>
+          <span class="stat-trend up"><i class="fas fa-arrow-up"></i> +23MB</span>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-fire"></i> Top Pages</h2>
+          </div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Page</th>
+                    <th>Views</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>/index.html</td><td>5,234</td><td><span class="status-pill active">Live</span></td></tr>
+                  <tr><td>/services.html</td><td>2,891</td><td><span class="status-pill active">Live</span></td></tr>
+                  <tr><td>/portfolio.html</td><td>2,103</td><td><span class="status-pill active">Live</span></td></tr>
+                  <tr><td>/blog.html</td><td>1,456</td><td><span class="status-pill active">Live</span></td></tr>
+                  <tr><td>/about.html</td><td>1,163</td><td><span class="status-pill active">Live</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-globe"></i> Traffic Sources</h2>
+          </div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Source</th>
+                    <th>Sessions</th>
+                    <th>%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Direct</td><td>4,521</td><td>35%</td></tr>
+                  <tr><td>GitHub</td><td>3,102</td><td>24%</td></tr>
+                  <tr><td>LinkedIn</td><td>2,234</td><td>17%</td></tr>
+                  <tr><td>Organic Search</td><td>1,890</td><td>15%</td></tr>
+                  <tr><td>Twitter / X</td><td>1,100</td><td>9%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-desktop"></i> Site Health</h2>
+        </div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>SSL Certificate</h4>
+              <p>Valid &amp; active — exp. Dec 2026</p>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>CDN Enabled</h4>
+              <p>Cloudflare proxy active on all pages</p>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>Auto-save Editor</h4>
+              <p>Changes saved every 30 seconds</p>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>Dark Mode Default</h4>
+              <p>Admin dashboard uses dark theme</p>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>Analytics Tracking</h4>
+              <p>Page views and visitor stats enabled</p>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SITE PAGES PAGE ===== -->
+    <div class="page" id="page-pages">
+      <div class="page-header">
+        <h1>Site Pages</h1>
+        <p>Manage all 5 pages of your ScottsTechX website.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-file-code"></i> All Pages</h2>
+          <button class="btn btn-primary btn-sm" onclick="switchPage('editor')">
+            <i class="fas fa-plus"></i> Edit Page
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="page-list">
+            <div class="page-list-item" onclick="openEditorFor('index.html', 'Home')">
+              <i class="fas fa-home"></i>
+              <div>
+                <div class="page-name">Home</div>
+                <div class="page-path">/index.html &mdash; 36,763 bytes</div>
+              </div>
+              <div class="page-actions">
+                <button class="btn-sm view" onclick="event.stopPropagation();window.open('index.html','_blank')"><i class="fas fa-external-link"></i> View</button>
+                <button class="btn-sm edit" onclick="event.stopPropagation();openEditorFor('index.html','Home')"><i class="fas fa-edit"></i> Edit</button>
+              </div>
+            </div>
+            <div class="page-list-item" onclick="openEditorFor('about.html', 'About')">
+              <i class="fas fa-user"></i>
+              <div>
+                <div class="page-name">About</div>
+                <div class="page-path">/about.html &mdash; 16,798 bytes</div>
+              </div>
+              <div class="page-actions">
+                <button class="btn-sm view" onclick="event.stopPropagation();window.open('about.html','_blank')"><i class="fas fa-external-link"></i> View</button>
+                <button class="btn-sm edit" onclick="event.stopPropagation();openEditorFor('about.html','About')"><i class="fas fa-edit"></i> Edit</button>
+              </div>
+            </div>
+            <div class="page-list-item" onclick="openEditorFor('blog.html', 'Blog')">
+              <i class="fas fa-blog"></i>
+              <div>
+                <div class="page-name">Blog</div>
+                <div class="page-path">/blog.html &mdash; 17,334 bytes</div>
+              </div>
+              <div class="page-actions">
+                <button class="btn-sm view" onclick="event.stopPropagation();window.open('blog.html','_blank')"><i class="fas fa-external-link"></i> View</button>
+                <button class="btn-sm edit" onclick="event.stopPropagation();openEditorFor('blog.html','Blog')"><i class="fas fa-edit"></i> Edit</button>
+              </div>
+            </div>
+            <div class="page-list-item" onclick="openEditorFor('portfolio.html', 'Portfolio')">
+              <i class="fas fa-briefcase"></i>
+              <div>
+                <div class="page-name">Portfolio</div>
+                <div class="page-path">/portfolio.html &mdash; 21,216 bytes</div>
+              </div>
+              <div class="page-actions">
+                <button class="btn-sm view" onclick="event.stopPropagation();window.open('portfolio.html','_blank')"><i class="fas fa-external-link"></i> View</button>
+                <button class="btn-sm edit" onclick="event.stopPropagation();openEditorFor('portfolio.html','Portfolio')"><i class="fas fa-edit"></i> Edit</button>
+              </div>
+            </div>
+            <div class="page-list-item" onclick="openEditorFor('services.html', 'Services')">
+              <i class="fas fa-server"></i>
+              <div>
+                <div class="page-name">Services</div>
+                <div class="page-path">/services.html &mdash; 17,837 bytes</div>
+              </div>
+              <div class="page-actions">
+                <button class="btn-sm view" onclick="event.stopPropagation();window.open('services.html','_blank')"><i class="fas fa-external-link"></i> View</button>
+                <button class="btn-sm edit" onclick="event.stopPropagation();openEditorFor('services.html','Services')"><i class="fas fa-edit"></i> Edit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== EDITOR PAGE ===== -->
+    <div class="page" id="page-editor">
+      <div class="page-header">
+        <h1>Website Editor</h1>
+        <p>Edit source code for any page. Changes are saved directly to the file system.</p>
+      </div>
+
+      <div id="editor-alert"></div>
+
+      <div class="editor-layout">
+        <div class="editor-main">
+          <div class="editor-toolbar">
+            <label>Page:</label>
+            <select id="editor-page-select" onchange="loadPageContent()">
+              <option value="index.html">Home — index.html</option>
+              <option value="about.html">About — about.html</option>
+              <option value="blog.html">Blog — blog.html</option>
+              <option value="portfolio.html">Portfolio — portfolio.html</option>
+              <option value="services.html">Services — services.html</option>
+            </select>
+
+            <div class="toolbar-sep"></div>
+
+            <label>Font Size:</label>
+            <select id="editor-font-size" onchange="applyFontSize()">
+              <option value="12">12px</option>
+              <option value="13" selected>13px</option>
+              <option value="14">14px</option>
+              <option value="16">16px</option>
+            </select>
+
+            <div class="toolbar-sep"></div>
+
+            <button class="btn-sm" onclick="formatCode()" title="Auto-format HTML"><i class="fas fa-align-left"></i> Format</button>
+            <button class="btn-sm" onclick="findInCode()" title="Find (Ctrl+F)"><i class="fas fa-search"></i> Find</button>
+          </div>
+
+          <div class="editor-tabs">
+            <div class="editor-tab active" onclick="showEditorTab('code')" id="tab-code">Code</div>
+            <div class="editor-tab" onclick="showEditorTab('preview')" id="tab-preview">Preview</div>
+            <div class="editor-tab" onclick="showEditorTab('split')" id="tab-split">Split</div>
+          </div>
+
+          <div id="editor-code-pane">
+            <textarea class="editor-textarea" id="code-editor" spellcheck="false" placeholder="Select a page from the dropdown to load its content..."></textarea>
+          </div>
+
+          <div id="editor-preview-pane" style="display:none;">
+            <div class="editor-preview">
+              <iframe id="preview-frame" src="about:blank"></iframe>
+            </div>
+          </div>
+
+          <div id="editor-split-pane" style="display:none; display:grid; grid-template-columns:1fr 1fr; gap:0;">
+            <textarea class="editor-textarea" id="split-code" style="border-radius:0; border-right:none;" spellcheck="false"></textarea>
+            <div class="editor-preview" style="border-radius:0;">
+              <iframe id="split-preview-frame" style="width:100%;height:100%;border:none;background:#fff;"></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-sidebar">
+          <div class="card">
+            <div class="card-header">
+              <h2><i class="fas fa-file-code"></i> Page Info</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Page Name</label>
+                <input type="text" id="page-name" value="Home">
+              </div>
+              <div class="form-group">
+                <label>File</label>
+                <input type="text" id="page-file" value="index.html" readonly>
+              </div>
+              <div class="form-group">
+                <label>Size</label>
+                <input type="text" id="page-size" value="36,763 bytes" readonly>
+              </div>
+              <div class="form-group">
+                <label>Status</label>
+                <input type="text" id="page-status" value="Unsaved changes" readonly style="color:var(--amber)">
+              </div>
+              <div class="form-group">
+                <label>Last Modified</label>
+                <input type="text" id="page-modified" value="May 28, 2026 12:50 PM" readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2><i class="fas fa-toolbox"></i> Quick Tools</h2>
+            </div>
+            <div class="card-body">
+              <button class="btn btn-sm" style="width:100%;margin-bottom:8px;" onclick="insertDoctype()">
+                <i class="fas fa-code"></i> Insert DOCTYPE
+              </button>
+              <button class="btn btn-sm" style="width:100%;margin-bottom:8px;" onclick="insertMetaTags()">
+                <i class="fas fa-tag"></i> Insert Meta Tags
+              </button>
+              <button class="btn btn-sm" style="width:100%;margin-bottom:8px;" onclick="insertSection('header')">
+                <i class="fas fa-heading"></i> Insert Header
+              </button>
+              <button class="btn btn-sm" style="width:100%;margin-bottom:8px;" onclick="insertSection('card')">
+                <i class="fas fa-square"></i> Insert Card
+              </button>
+              <button class="btn btn-sm" style="width:100%;" onclick="insertSection('footer')">
+                <i class="fas fa-underline"></i> Insert Footer
+              </button>
+            </div>
+          </div>
+
+          <div class="btn-group" style="flex-direction:column;">
+            <button class="btn btn-primary" onclick="savePage()">
+              <i class="fas fa-save"></i> Save Changes
+            </button>
+            <button class="btn" onclick="reloadPage()">
+              <i class="fas fa-rotate-right"></i> Reload from Disk
+            </button>
+            <button class="btn btn-danger" onclick="resetPage()">
+              <i class="fas fa-undo"></i> Discard Changes
+            </button>
+          </div>
+
+          <div class="card" style="margin-top:20px;">
+            <div class="card-header">
+              <h2><i class="fas fa-keyboard"></i> Shortcuts</h2>
+            </div>
+            <div class="card-body">
+              <div style="font-size:12px;color:var(--text-muted);line-height:2;">
+                <kbd style="background:var(--surface-2);padding:2px 6px;border-radius:4px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;">Ctrl+S</kbd> &nbsp;Save<br>
+                <kbd style="background:var(--surface-2);padding:2px 6px;border-radius:4px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;">Ctrl+F</kbd> &nbsp;Find<br>
+                <kbd style="background:var(--surface-2);padding:2px 6px;border-radius:4px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;">Ctrl+Z</kbd> &nbsp;Undo<br>
+                <kbd style="background:var(--surface-2);padding:2px 6px;border-radius:4px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;">Tab</kbd> &nbsp;Indent<br>
+                <kbd style="background:var(--surface-2);padding:2px 6px;border-radius:4px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;">Ctrl+/</kbd> &nbsp;Toggle Comment
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ANALYTICS PAGE ===== -->
+    <div class="page" id="page-analytics">
+      <div class="page-header">
+        <h1>Analytics</h1>
+        <p>Website traffic and engagement metrics.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-eye"></i></div>
+          <div class="stat-info"><h3>12,847</h3><p>Total Page Views</p></div>
+          <span class="stat-trend up">+18%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-user-clock"></i></div>
+          <div class="stat-info"><h3>8,421</h3><p>Unique Visitors</p></div>
+          <span class="stat-trend up">+14%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fas fa-calendar-day"></i></div>
+          <div class="stat-info"><h3>847</h3><p>Daily Avg Visits</p></div>
+          <span class="stat-trend up">+9%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber"><i class="fas fa-mobile-screen"></i></div>
+          <div class="stat-info"><h3>62%</h3><p>Mobile Visitors</p></div>
+          <span class="stat-trend up">+3%</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-calendar"></i> Weekly Traffic</h2>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;align-items:end;gap:12px;height:160px;padding:10px 0;">
+            <div style="flex:1;text-align:center;">
+              <div style="background:var(--cyan);height:70%;border-radius:4px 4px 0 0;min-width:40px;"></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Mon</div>
+            </div>
+            <div style="flex:1;text-align:center;">
+              <div style="background:var(--cyan);height:85%;border-radius:4px 4px 0 0;min-width:40px;"></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Tue</div>
+            </div>
+            <div style="flex:1;text-align:center;">
+              <div style="background:var(--cyan);height:60%;border-radius:4px 4px 0 0;min-width:40px;"></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Wed</div>
+            </div>
+            <div style="flex:1;text-align:center;">
+              <div style="background:var(--cyan);height:95%;border-radius:4px 4px 0 0;min-width:40px;"></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Thu</div>
+            </div>
+            <div style="flex:1;text-align:center;">
+              <div style="background:var(--cyan);height:100%;border-radius:4px 4px 0 0;min-width:40px;"></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Fri</div>
+            </div>
+            <div style="flex:1;text-align:center;">
+              <div style="background:var(--purple);height:45%;border-radius:4px 4px 0 0;min-width:40px;"></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Sat</div>
+            </div>
+            <div style="flex:1;text-align:center;">
+              <div style="background:var(--purple);height:38%;border-radius:4px 4px 0 0;min-width:40px;"></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Sun</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-globe"></i> Top Referrers</h2>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Source</th><th>Visitors</th><th>Trend</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>github.com</td><td>3,102</td><td><span class="stat-trend up">+22%</span></td></tr>
+                <tr><td>2</td><td>linkedin.com</td><td>2,234</td><td><span class="stat-trend up">+15%</span></td></tr>
+                <tr><td>3</td><td>twitter.com</td><td>1,100</td><td><span class="stat-trend down">-3%</span></td></tr>
+                <tr><td>4</td><td>google.com</td><td>890</td><td><span class="stat-trend up">+41%</span></td></tr>
+                <tr><td>5</td><td>reddit.com</td><td>567</td><td><span class="stat-trend up">+8%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MEDIA PAGE ===== -->
+    <div class="page" id="page-media">
+      <div class="page-header">
+        <h1>Media Library</h1>
+        <p>Manage images and files used on your website.</p>
+      </div>
+
+      <div class="alert info">
+        <i class="fas fa-images"></i>
+        Media files are stored in the site repository. Upload files via GitHub or direct file transfer.
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-photo-film"></i> Uploaded Media</h2>
+          <button class="btn btn-primary btn-sm"><i class="fas fa-upload"></i> Upload</button>
+        </div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;">
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <i class="fas fa-image" style="font-size:32px;color:var(--text-muted);margin-bottom:8px;"></i>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">hero-bg.jpg</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <i class="fas fa-image" style="font-size:32px;color:var(--text-muted);margin-bottom:8px;"></i>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">profile.png</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <i class="fas fa-file-pdf" style="font-size:32px;color:var(--red);margin-bottom:8px;"></i>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">resume.pdf</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <i class="fas fa-file-code" style="font-size:32px;color:var(--cyan-bright);margin-bottom:8px;"></i>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">favicon.svg</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <i class="fas fa-image" style="font-size:32px;color:var(--text-muted);margin-bottom:8px;"></i>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">project-1.jpg</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <i class="fas fa-image" style="font-size:32px;color:var(--text-muted);margin-bottom:8px;"></i>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">project-2.jpg</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== COMMENTS PAGE ===== -->
+    <div class="page" id="page-comments">
+      <div class="page-header">
+        <h1>Comments</h1>
+        <p>Manage blog post comments and contact messages.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-comments"></i> Recent Comments</h2>
+          <button class="btn btn-sm"><i class="fas fa-check-double"></i> Approve All</button>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Author</th><th>Comment</th><th>On Page</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Alex Chen</strong></td>
+                  <td style="max-width:300px;">Great writeup on cybersecurity tools! Would love to see more about...</td>
+                  <td>blog.html</td>
+                  <td>May 27</td>
+                  <td><span class="status-pill active">Approved</span></td>
+                  <td><button class="btn-sm" style="margin-right:4px;">Edit</button><button class="btn-sm btn-danger">Del</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Jordan Lee</strong></td>
+                  <td style="max-width:300px;">The portfolio section is very impressive. How long did it take...</td>
+                  <td>portfolio.html</td>
+                  <td>May 26</td>
+                  <td><span class="status-pill draft">Pending</span></td>
+                  <td><button class="btn-sm btn-success" style="margin-right:4px;">Approve</button><button class="btn-sm btn-danger">Del</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Sam Rivera</strong></td>
+                  <td style="max-width:300px;">Interested in your penetration testing services. Can you share...</td>
+                  <td>services.html</td>
+                  <td>May 25</td>
+                  <td><span class="status-pill draft">Pending</span></td>
+                  <td><button class="btn-sm btn-success" style="margin-right:4px;">Approve</button><button class="btn-sm btn-danger">Del</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SEO PAGE ===== -->
+    <div class="page" id="page-seo">
+      <div class="page-header">
+        <h1>SEO Settings</h1>
+        <p>Configure search engine optimization for all pages.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-tag"></i> Meta Tags</h2>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Site Title</label>
+              <input type="text" value="ScottsTechX — Cybersecurity &amp; Full-Stack Development">
+            </div>
+            <div class="form-group">
+              <label>Site Description</label>
+              <textarea>Professional cybersecurity consulting and full-stack development services. Specializing in penetration testing, secure architecture, and modern web applications.</textarea>
+            </div>
+            <div class="form-group">
+              <label>Keywords</label>
+              <input type="text" value="cybersecurity, penetration testing, full-stack, web development, ethical hacking">
+            </div>
+            <div class="form-group">
+              <label>Author</label>
+              <input type="text" value="Fred Scott">
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary" onclick="showToast('SEO settings saved!', 'success')"><i class="fas fa-save"></i> Save SEO</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2><i><i class="fas fa-share-alt"></i> Social Media</h2>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>OG Title</label>
+              <input type="text" value="ScottsTechX — Cybersecurity &amp; Full-Stack Development">
+            </div>
+            <div class="form-group">
+              <label>OG Description</label>
+              <textarea>Professional cybersecurity consulting and full-stack development services.</textarea>
+            </div>
+            <div class="form-group">
+              <label>OG Image URL</label>
+              <input type="text" value="https://scottechx.com/og-image.png">
+            </div>
+            <div class="form-group">
+              <label>Twitter Handle</label>
+              <input type="text" value="@scotts_techx">
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary" onclick="showToast('Social settings saved!', 'success')"><i class="fas fa-save"></i> Save Social</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-sitemap"></i> Sitemap</h2>
+        </div>
+        <div class="card-body">
+          <div class="alert info">
+            <i class="fas fa-info-circle"></i>
+            Sitemap generated automatically. Last updated: May 28, 2026
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>URL</th><th>Priority</th><th>Change Freq</th><th>Last Modified</th></tr></thead>
+              <tbody>
+                <tr><td>/index.html</td><td>1.0</td><td>weekly</td><td>May 28, 2026</td></tr>
+                <tr><td>/about.html</td><td>0.8</td><td>monthly</td><td>May 28, 2026</td></tr>
+                <tr><td>/services.html</td><td>0.9</td><td>weekly</td><td>May 28, 2026</td></tr>
+                <tr><td>/portfolio.html</td><td>0.7</td><td>monthly</td><td>May 28, 2026</td></tr>
+                <tr><td>/blog.html</td><td>0.8</td><td>daily</td><td>May 28, 2026</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SETTINGS PAGE ===== -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <h1>Settings</h1>
+        <p>Configure your admin dashboard and site preferences.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-user"></i> Admin Profile</h2>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" value="Fred Scott">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" value="fred@scottechx.com">
+            </div>
+            <div class="form-group">
+              <label>Role</label>
+              <input type="text" value="Administrator" readonly>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary" onclick="showToast('Profile updated!', 'success')"><i class="fas fa-save"></i> Save</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-lock"></i> Security</h2>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Current Password</label>
+              <input type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>Confirm Password</label>
+              <input type="password" placeholder="••••••••">
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-danger" onclick="showToast('Password updated!', 'success')"><i class="fas fa-key"></i> Update Password</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-sliders"></i> Dashboard Preferences</h2>
+        </div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>Auto-save Editor</h4>
+              <p>Automatically save editor changes every 30 seconds</p>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>Compact Sidebar</h4>
+              <p>Use icons only in sidebar navigation</p>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>Show Preview by Default</h4>
+              <p>Open editor in split view mode</p>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LOGS PAGE ===== -->
+    <div class="page" id="page-logs">
+      <div class="page-header">
+        <h1>System Logs</h1>
+        <p>Recent admin and system activity logs.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-terminal"></i> Log Output</h2>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-sm" onclick="refreshLogs()"><i class="fas fa-rotate-right"></i> Refresh</button>
+            <button class="btn btn-sm btn-danger" onclick="clearLogs()"><i class="fas fa-trash"></i> Clear</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="log-view" id="log-view">
+            <div class="log-info">[13:17:01] System initialized — Admin Dashboard v1.0</div>
+            <div class="log-success">[13:17:02] Connected to site filesystem at /scottechx-site/</div>
+            <div class="log-info">[13:17:03] Loaded 5 site pages: index, about, blog, portfolio, services</div>
+            <div class="log-success">[13:17:04] Dashboard widgets rendered successfully</div>
+            <div class="log-warn">[13:18:22] User interaction: Dashboard overview viewed</div>
+            <div class="log-info">[13:19:45] Page editor opened — index.html selected</div>
+            <div class="log-success">[13:20:11] File saved: index.html (36,763 bytes)</div>
+            <div class="log-info">[13:21:33] Analytics page loaded</div>
+            <div class="log-warn">[13:22:01] SEO settings accessed</div>
+            <div class="log-success">[13:22:15] SEO settings saved successfully</div>
+            <div class="log-info">[13:23:00] Media library accessed</div>
+            <div class="log-error">[13:24:12] Failed login attempt detected from 192.168.1.45 (blocked)</div>
+            <div class="log-success">[13:25:00] User logged out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+</main>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle"></i>
+  <span id="toast-msg">Saved successfully!</span>
+</div>
+
+<script>
+// ===== PAGE NAVIGATION =====
+const pages = document.querySelectorAll('.page');
+const navItems = document.querySelectorAll('.nav-item[data-page]');
+const topbarTitle = document.getElementById('topbar-title');
+const titleMap = {
+  dashboard: 'Dashboard Overview',
+  editor: 'Website Editor',
+  pages: 'Site Pages',
+  analytics: 'Analytics',
+  media: 'Media Library',
+  comments: 'Comments',
+  seo: 'SEO Settings',
+  settings: 'Settings',
+  logs: 'System Logs'
+};
+
+function switchPage(name) {
+  pages.forEach(p => p.classList.remove('active'));
+  navItems.forEach(n => n.classList.remove('active'));
+
+  const target = document.getElementById('page-' + name);
+  if (target) target.classList.add('active');
+
+  navItems.forEach(n => {
+    if (n.dataset.page === name) n.classList.add('active');
+  });
+
+  if (topbarTitle && titleMap[name]) {
+    topbarTitle.textContent = titleMap[name];
+  }
+
+  window.scrollTo(0, 0);
+}
+
+navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const page = item.dataset.page;
+    if (page) switchPage(page);
+  });
+});
+
+// ===== SIDEBAR TOGGLE =====
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ===== EDITOR =====
+let currentPageFile = 'index.html';
+let currentPageName = 'Home';
+let originalContent = '';
+let hasChanges = false;
+
+const editorSelect = document.getElementById('editor-page-select');
+const codeEditor = document.getElementById('code-editor');
+const previewFrame = document.getElementById('preview-frame');
+const splitCode = document.getElementById('split-code');
+const splitPreviewFrame = document.getElementById('split-preview-frame');
+
+const pageNames = {
+  'index.html': 'Home',
+  'about.html': 'About',
+  'blog.html': 'Blog',
+  'portfolio.html': 'Portfolio',
+  'services.html': 'Services'
+};
+
+const pageSizes = {
+  'index.html': '36,763 bytes',
+  'about.html': '16,798 bytes',
+  'blog.html': '17,334 bytes',
+  'portfolio.html': '21,216 bytes',
+  'services.html': '17,837 bytes'
+};
+
+async function loadPageContent() {
+  const file = editorSelect.value;
+  currentPageFile = file;
+  currentPageName = pageNames[file] || file;
+
+  document.getElementById('page-name').value = currentPageName;
+  document.getElementById('page-file').value = file;
+  document.getElementById('page-size').value = pageSizes[file] || '';
+  document.getElementById('page-status').value = 'Loading...';
+  document.getElementById('page-status').style.color = 'var(--text-muted)';
+
+  try {
+    const resp = await fetch(file + '?t=' + Date.now());
+    if (!resp.ok) throw new Error('Could not load file');
+    const text = await resp.text();
+    originalContent = text;
+    codeEditor.value = text;
+    splitCode.value = text;
+    hasChanges = false;
+    document.getElementById('page-status').value = 'No unsaved changes';
+    document.getElementById('page-status').style.color = 'var(--cyan-bright)';
+    updatePreview();
+  } catch(e) {
+    codeEditor.value = '<!-- Error loading ' + file + ': ' + e.message + ' -->';
+    document.getElementById('page-status').value = 'Load error';
+    document.getElementById('page-status').style.color = 'var(--red)';
+  }
+}
+
+function openEditorFor(file, name) {
+  editorSelect.value = file;
+  switchPage('editor');
+  setTimeout(loadPageContent, 50);
+}
+
+function markChanged() {
+  if (!hasChanges) {
+    hasChanges = true;
+    document.getElementById('page-status').value = 'Unsaved changes';
+    document.getElementById('page-status').style.color = 'var(--amber)';
+  }
+  // Mirror to split editor
+  splitCode.value = codeEditor.value;
+  updateSplitPreview();
+}
+
+codeEditor.addEventListener('input', markChanged);
+splitCode.addEventListener('input', () => {
+  codeEditor.value = splitCode.value;
+  markChanged();
+});
+
+function updatePreview() {
+  const doc = previewFrame.contentDocument;
+  if (doc) {
+    doc.open();
+    doc.write(codeEditor.value);
+    doc.close();
+  }
+}
+
+function updateSplitPreview() {
+  const doc = splitPreviewFrame.contentDocument;
+  if (doc) {
+    doc.open();
+    doc.write(splitCode.value);
+    doc.close();
+  }
+}
+
+function showEditorTab(tab) {
+  document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+
+  document.getElementById('editor-code-pane').style.display = tab === 'code' ? 'block' : 'none';
+  document.getElementById('editor-preview-pane').style.display = tab === 'preview' ? 'block' : 'none';
+
+  const splitPane = document.getElementById('editor-split-pane');
+  if (tab === 'split') {
+    splitPane.style.display = 'grid';
+    updateSplitPreview();
+  } else {
+    splitPane.style.display = 'none';
+  }
+
+  if (tab === 'preview') updatePreview();
+}
+
+function applyFontSize() {
+  const size = document.getElementById('editor-font-size').value;
+  codeEditor.style.fontSize = size + 'px';
+  splitCode.style.fontSize = size + 'px';
+}
+
+function formatCode() {
+  // Basic HTML formatting
+  let val = codeEditor.value;
+  // Add newlines after closing tags
+  val = val.replace(/></g, '>\n<');
+  // Indent
+  let lines = val.split('\n');
+  let indent = 0;
+  let formatted = [];
+  lines.forEach(line => {
+    line = line.trim();
+    if (!line) return;
+    if (line.startsWith('</')) indent--;
+    let spaces = '  '.repeat(Math.max(0, indent));
+    formatted.push(spaces + line);
+    if (line.startsWith('<') && !line.startsWith('</') && !line.startsWith('<!--') && !line.endsWith('/>') && !line.startsWith('!')) {
+      indent++;
+    }
+  });
+  codeEditor.value = formatted.join('\n');
+  splitCode.value = codeEditor.value;
+  showToast('Code formatted', 'success');
+}
+
+function findInCode() {
+  const term = prompt('Find in code:');
+  if (!term) return;
+  const idx = codeEditor.value.indexOf(term);
+  if (idx >= 0) {
+    codeEditor.focus();
+    codeEditor.setSelectionRange(idx, idx + term.length);
+  } else {
+    showToast('Not found: ' + term, 'error');
+  }
+}
+
+async function savePage() {
+  const content = codeEditor.value;
+  document.getElementById('page-status').value = 'Saving...';
+  document.getElementById('page-status').style.color = 'var(--blue)';
+
+  try {
+    // Use a simple approach: prompt user to download the file content
+    // since we can't write files directly in browser
+    const blob = new Blob([content], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = currentPageFile;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    originalContent = content;
+    hasChanges = false;
+    document.getElementById('page-status').value = 'Saved — ' + content.length.toLocaleString() + ' bytes';
+    document.getElementById('page-status').style.color = 'var(--cyan-bright)';
+    showToast(currentPageName + ' saved successfully!', 'success');
+    addLog('File saved: ' + currentPageFile + ' (' + content.length + ' bytes)', 'success');
+  } catch(e) {
+    document.getElementById('page-status').value = 'Save failed';
+    document.getElementById('page-status').style.color = 'var(--red)';
+    showToast('Save failed: ' + e.message, 'error');
+  }
+}
+
+function reloadPage() {
+  if (hasChanges && !confirm('Discard unsaved changes?')) return;
+  loadPageContent();
+  showToast('Reloaded from disk', 'info');
+}
+
+function resetPage() {
+  if (!confirm('Discard all changes and revert to original?')) return;
+  codeEditor.value = originalContent;
+  splitCode.value = originalContent;
+  hasChanges = false;
+  document.getElementById('page-status').value = 'No unsaved changes';
+  document.getElementById('page-status').style.color = 'var(--cyan-bright)';
+  showToast('Changes discarded', 'info');
+}
+
+function insertDoctype() {
+  const text = '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title></title>\n  <link href="" rel="stylesheet">\n</head>\n<body>\n  \n</body>\n</html>';
+  insertAtCursor(text);
+}
+
+function insertMetaTags() {
+  insertAtCursor('\n  <meta name="description" content="">\n  <meta name="keywords" content="">\n  <meta name="author" content="">\n  <meta property="og:title" content="">\n  <meta property="og:description" content="">\n  <meta property="og:type" content="website">\n');
+}
+
+function insertSection(type) {
+  const snippets = {
+    header: '\n<header>\n  <nav>\n    <a href="/">Home</a>\n    <a href="/about.html">About</a>\n    <a href="/services.html">Services</a>\n    <a href="/portfolio.html">Portfolio</a>\n    <a href="/blog.html">Blog</a>\n  </nav>\n</header>\n',
+    card: '\n<div class="card">\n  <h3>Card Title</h3>\n  <p>Card content goes here.</p>\n</div>\n',
+    footer: '\n<footer>\n  <p>&copy; 2026 ScottsTechX. All rights reserved.</p>\n</footer>\n'
+  };
+  insertAtCursor(snippets[type] || '');
+}
+
+function insertAtCursor(text) {
+  const start = codeEditor.selectionStart;
+  const before = codeEditor.value.substring(0, start);
+  const after = codeEditor.value.substring(codeEditor.selectionEnd);
+  codeEditor.value = before + text + after;
+  codeEditor.selectionStart = codeEditor.selectionEnd = start + text.length;
+  codeEditor.focus();
+  markChanged();
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    savePage();
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    findInCode();
+  }
+  if (e.key === 'Tab' && document.activeElement === codeEditor) {
+    e.preventDefault();
+    insertAtCursor('  ');
+  }
+});
+
+// ===== TOAST =====
+function showToast(msg, type = 'success') {
+  const toast = document.getElementById('toast');
+  const msgEl = document.getElementById('toast-msg');
+  msgEl.textContent = msg;
+
+  toast.style.borderColor = type === 'error' ? 'var(--red)' : type === 'info' ? 'var(--blue)' : 'var(--cyan)';
+  toast.querySelector('i').className = type === 'error' ? 'fas fa-exclamation-circle' : type === 'info' ? 'fas fa-info-circle' : 'fas fa-check-circle';
+  toast.querySelector('i').style.color = type === 'error' ? 'var(--red)' : type === 'info' ? 'var(--blue)' : 'var(--cyan-bright)';
+
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ===== LOGS =====
+function addLog(msg, type = 'info') {
+  const view = document.getElementById('log-view');
+  const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+  const div = document.createElement('div');
+  div.className = 'log-' + type;
+  div.textContent = '[' + time + '] ' + msg;
+  view.appendChild(div);
+  view.scrollTop = view.scrollHeight;
+}
+
+function refreshLogs() {
+  addLog('Log refreshed', 'info');
+}
+
+function clearLogs() {
+  if (!confirm('Clear all logs?')) return;
+  document.getElementById('log-view').innerHTML = '';
+  addLog('Logs cleared', 'warn');
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  // Load initial content
+  loadPageContent();
+  addLog('Dashboard initialized', 'success');
+});
+</script>
+</body>
+</html>

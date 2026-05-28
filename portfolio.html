@@ -6,11 +6,11 @@
   <title>Portfolio — ScottsTechX</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #0a0a0f; --surface: #12121a; --border: #1e1e2e; --cyan: #00e5ff; --cyan-dim: #00b8cc; --blue: #0080ff; --purple: #a855f7; --text: #e2e8f0; --text-muted: #64748b; --green: #10b981; --red: #ef4444; }
+    :root { --bg: #0a0a0f; --surface: #12121a; --border: #1e1e2e; --cyan: #166534; --cyan-dim: rgba(6,78,59,0.25); --blue: #0080ff; --purple: #a855f7; --text: #e2e8f0; --text-muted: #64748b; --green: #10b981; --red: #ef4444; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
-    .grid-bg { position: fixed; inset: 0; background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
+    .grid-bg { position: fixed; inset: 0; background-image: linear-gradient(rgba(22,101,52,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(22,101,52,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-logo { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--cyan); text-decoration: none; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
@@ -19,7 +19,7 @@
     .nav-links a.cta-btn { color: var(--bg); background: var(--cyan); padding: 0.4rem 1rem; border-radius: 6px; font-weight: 600; }
     .nav-links a.cta-btn:hover { background: var(--cyan-dim); }
     .page-hero { position: relative; padding: 10rem 2rem 4rem; text-align: center; z-index: 1; }
-    .page-hero::before { content: ''; position: absolute; top: 15%; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%); pointer-events: none; }
+    .page-hero::before { content: ''; position: absolute; top: 15%; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; background: radial-gradient(circle, rgba(22,101,52,0.08) 0%, transparent 70%); pointer-events: none; }
     .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--cyan); letter-spacing: 0.1em; margin-bottom: 1rem; }
     h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -1.5px; margin-bottom: 1rem; }
     h1 .accent { color: var(--cyan); }
@@ -40,7 +40,7 @@
     .proj-card h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
     .proj-card p { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1rem; }
     .proj-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-    .proj-tag { background: rgba(0,229,255,0.08); color: var(--cyan-dim); font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+    .proj-tag { background: rgba(22,101,52,0.08); color: var(--cyan-dim); font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
     .proj-tag.sec { background: rgba(168,85,247,0.1); color: var(--purple); }
     .proj-tag.dev { background: rgba(16,185,129,0.1); color: var(--green); }
     .devider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }

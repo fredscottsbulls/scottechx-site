@@ -725,35 +725,6 @@
     .hamburger.active span:nth-child(2) { opacity: 0; }
     .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-    /* SHARE BAR */
-    .share-bar {
-      position: fixed;
-      left: 1.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 98;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-    .share-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-    }
-    .share-btn:hover { transform: scale(1.15); box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
-    .share-whatsapp { background: #25D366; color: #fff; }
-    .share-twitter { background: #000; color: #fff; border: 1px solid #333; }
-    .share-linkedin { background: #0A66C2; color: #fff; }
-    .share-facebook { background: #1877F2; color: #fff; }
-
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .nav-links {
@@ -966,14 +937,6 @@
   </button>
 </nav>
 
-<!-- SHARE BAR (desktop left side) -->
-<div class="share-bar">
-  <a href="https://wa.me/256740396825?text=I%20just%20found%20ScottsTechX%20%E2%80%94%20a%20cybersecurity%20researcher%20and%20full-stack%20developer.%20Check%20them%20out%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-whatsapp" title="Share on WhatsApp">📱</a>
-  <a href="https://twitter.com/intent/tweet?text=Cybersecurity%20researcher%20and%20full-stack%20developer.%20Check%20out%20ScottsTechX%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-twitter" title="Share on X">✖</a>
-  <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-linkedin" title="Share on LinkedIn">💼</a>
-  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-facebook" title="Share on Facebook">📘</a>
-</div>
-
 <!-- HERO -->
 <div class="hero">
   <div>
@@ -993,14 +956,6 @@
     <div class="hero-actions">
       <a href="https://wa.me/256740396825?text=Hi%20Fred%2C%20I%27d%20like%20to%20work%20with%20you." target="_blank" class="btn btn-primary">Hire Me →</a>
       <a href="https://github.com/fredscottsbulls" target="_blank" class="btn btn-outline">View GitHub</a>
-    </div>
-
-    <!-- MOBILE SHARE BAR -->
-    <div class="share-mobile-bar">
-      <a href="https://wa.me/256740396825?text=I%20just%20found%20ScottsTechX%20%E2%80%94%20a%20cybersecurity%20researcher%20and%20full-stack%20developer.%20Check%20them%20out%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-mobile-btn whatsapp">📱 WhatsApp</a>
-      <a href="https://twitter.com/intent/tweet?text=Cybersecurity%20researcher%20and%20full-stack%20developer.%20Check%20out%20ScottsTechX%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-mobile-btn twitter">✖ Share on X</a>
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-mobile-btn linkedin">💼 LinkedIn</a>
-      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-mobile-btn facebook">📘 Facebook</a>
     </div>
 
     <div class="terminal-card">
@@ -1161,6 +1116,18 @@
   </div>
 </section>
 
+<!-- SHARE MENU (bottom-left, animated expand) + WHATSAPP (bottom-right) -->
+<div class="share-menu" id="shareMenu">
+  <div class="share-panel" id="sharePanel">
+    <a href="https://wa.me/256740396825?text=I%20just%20found%20ScottsTechX%20%E2%80%94%20cybersecurity%20and%20full-stack.%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-wa" title="WhatsApp">📱</a>
+    <a href="https://twitter.com/intent/tweet?text=Cybersecurity%20researcher%20%40ScottsTechX%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-x" title="Share on X">✖</a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-li" title="LinkedIn">💼</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-fb" title="Facebook">📘</a>
+  </div>
+  <button class="share-toggle" id="shareToggle" title="Share" aria-label="Open share menu">↗</button>
+</div>
+<a href="https://wa.me/256740396825?text=Hi%20Fred%2C%20I%27d%20like%20to%20work%20with%20you." target="_blank" class="whatsapp-float" title="Chat on WhatsApp">💬</a>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-links">
@@ -1170,20 +1137,17 @@
   <p class="footer-copy">© 2026 <span>ScottsTechX</span> — Built with purpose.</p>
 </footer>
 
-<!-- FLOATING CTA — row on phones (bottom-left), column on desktop (bottom-right) -->
-<div class="floating-cta">
-  <a href="https://t.me/scottechx" target="_blank" class="float-btn float-telegram" title="Message on Telegram">💬</a>
-  <a href="https://github.com/fredscottsbulls" target="_blank" class="float-btn float-github" title="GitHub">🐙</a>
-  <a href="https://dev.to/fredscottsbulls" target="_blank" class="float-btn float-devto" title="Dev.to">📝</a>
-</div>
+
+
 
 <script>
-  // Floating CTA toggle (phone)
-  const floatToggle = document.getElementById('floatToggle');
-  const floatPanel = document.getElementById('floatPanel');
-  if (floatToggle && floatPanel) {
-    floatToggle.addEventListener('click', () => {
-      floatPanel.classList.toggle('open');
+  // Share menu toggle
+  const shareToggle = document.getElementById('shareToggle');
+  const sharePanel = document.getElementById('sharePanel');
+  if (shareToggle && sharePanel) {
+    shareToggle.addEventListener('click', () => {
+      sharePanel.classList.toggle('open');
+      shareToggle.classList.toggle('open');
     });
   }
 

@@ -53,13 +53,69 @@
     .footer-links a:hover { color: var(--cyan); }
     .footer-copy { color: var(--text-muted); font-size: 0.8rem; }
     @media (max-width: 600px) { .nav-links { gap: 1rem; } }
+
+    /* HAMBURGER */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .hamburger span { width: 24px; height: 2px; background: var(--cyan); border-radius: 2px; transition: all 0.3s; }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    /* SHARE BAR */
+    .share-bar { position: fixed; left: 1.5rem; top: 50%; transform: translateY(-50%); z-index: 98; display: flex; flex-direction: column; gap: 0.6rem; }
+    .share-btn { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; text-decoration: none; transition: transform 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+    .share-btn:hover { transform: scale(1.15); }
+    .share-whatsapp { background: #25D366; color: #fff; }
+    .share-twitter { background: #000; color: #fff; border: 1px solid #333; }
+    .share-linkedin { background: #0A66C2; color: #fff; }
+    .share-facebook { background: #1877F2; color: #fff; }
+    .share-mobile-bar { display: none; }
+    .share-mobile-wrap { text-align: center; margin: 2rem 0; }
+    .share-mobile-wrap h3 { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; font-family: JetBrains Mono, monospace; }
+    .share-mobile-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .share-mobile-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.2rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; text-decoration: none; color: #fff; }
+    .share-mobile-btn:hover { opacity: 0.9; }
+    .share-mobile-btn.whatsapp { background: #25D366; }
+    .share-mobile-btn.twitter { background: #000; border: 1px solid #333; }
+    .share-mobile-btn.linkedin { background: #0A66C2; }
+    .share-mobile-btn.facebook { background: #1877F2; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; position: fixed; top: 60px; left: 0; right: 0; background: rgba(10,10,15,0.97); backdrop-filter: blur(16px); flex-direction: column; gap: 0; border-bottom: 1px solid var(--border); padding: 1rem 0; }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a { display: block; padding: 0.85rem 2rem; font-size: 1rem; border-radius: 0; }
+      .nav-links a.cta-btn { margin: 0.5rem 2rem; text-align: center; width: calc(100% - 4rem); }
+      .hamburger { display: flex; }
+      .share-bar { display: none; }
+      .share-mobile-bar { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    }
+
   </style>
 </head>
 <body>
+<!-- SHARE BAR -->
+<div class="share-bar">
+  <a href="https://wa.me/?text=Cybersecurity%20researcher%20and%20full-stack%20developer.%20Check%20out%20ScottsTechX%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-whatsapp" title="WhatsApp">&#128241;</a>
+  <a href="https://twitter.com/intent/tweet?text=Cybersecurity%20researcher%20and%20full-stack%20developer.%20Check%20out%20ScottsTechX%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-twitter" title="X">&#10060;</a>
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-linkedin" title="LinkedIn">&#128187;</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-btn share-facebook" title="Facebook">&#128179;</a>
+</div>
+<div class="share-mobile-wrap">
+  <h3>// Share</h3>
+  <div class="share-mobile-bar">
+    <a href="https://wa.me/?text=Cybersecurity%20researcher%20and%20full-stack%20developer.%20Check%20out%20ScottsTechX%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-mobile-btn whatsapp">&#128241; WhatsApp</a>
+    <a href="https://twitter.com/intent/tweet?text=Cybersecurity%20researcher%20and%20full-stack%20developer.%20Check%20out%20ScottsTechX%3A%20https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-mobile-btn twitter">&#10060; X</a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-mobile-btn linkedin">&#128187; LinkedIn</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffredscottsbulls.github.io%2Fscottechx-site%2F" target="_blank" class="share-mobile-btn facebook">&#128179; Facebook</a>
+  </div>
+</div>
+
   <div class="grid-bg"></div>
   <nav>
     <a href="index.html" class="nav-logo">Scotts<span>TechX</span></a>
-    <ul class="nav-links">
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="services.html" class="active">Services</a></li>
       <li><a href="portfolio.html">Portfolio</a></li>
@@ -169,5 +225,20 @@
     </div>
     <p class="footer-copy">© 2026 <span>ScottsTechX</span> — Built with purpose.</p>
   </footer>
+
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('open');
+      });
+    });
+  }
 </body>
 </html>

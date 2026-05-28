@@ -32,16 +32,29 @@
       overflow-x: hidden;
     }
 
-    /* GRID BG */
-    .grid-bg {
+    /* HERO BACKGROUND */
+    .hero-bg {
       position: fixed;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(22,101,52,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(22,101,52,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
       z-index: 0;
+    }
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.25) saturate(0.6);
+    }
+    #matrix-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+    .hero {
+      position: relative;
+      z-index: 2;
     }
 
     /* NAV */
@@ -704,8 +717,11 @@
   </style>
 </head>
 <body>
+<div class="hero-bg">
+  <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80" alt="Hooded hacker typing" loading="eager">
+</div>
+<canvas id="matrix-canvas"></canvas>
 
-<div class="grid-bg"></div>
 
 <!-- NAV -->
 <nav>
@@ -976,6 +992,32 @@
         status.className = 'form-status sent';
       });
   }
+
+
+  const canvas = document.getElementById('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+  let cols, drops;
+  function initMatrix() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    cols = Math.floor(canvas.width / 16);
+    drops = Array(cols).fill(1);
+  }
+  initMatrix();
+  window.addEventListener('resize', initMatrix);
+  function drawMatrix() {
+    ctx.fillStyle = 'rgba(6, 7, 10, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#22c55e';
+    ctx.font = '14px JetBrains Mono, monospace';
+    for (let i = 0; i < drops.length; i++) {
+      const char = String.fromCharCode(0x30 + Math.random() * 94);
+      ctx.fillText(char, i * 16, drops[i] * 16);
+      if (drops[i] * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 50);
 
   // Scroll reveal
   const observer = new IntersectionObserver((entries) => {

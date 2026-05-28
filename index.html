@@ -22,7 +22,7 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -30,6 +30,7 @@
       color: var(--text);
       line-height: 1.7;
       overflow-x: hidden;
+      overflow-y: auto;
     }
 
     /* HERO BACKGROUND */
@@ -177,6 +178,66 @@
       pointer-events: none;
     }
 
+
+    /* ANIMATED TITLE */
+    .hero-animated-title {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1rem, 4vw, 1.8rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      overflow: hidden;
+    }
+    .title-scott {
+      color: #fff;
+      display: inline;
+      animation: titleReveal 0.6s ease-out forwards;
+    }
+    .title-tech {
+      color: var(--cyan);
+      display: inline;
+      animation: titleReveal 0.6s 0.15s ease-out forwards;
+      opacity: 0;
+    }
+    .title-x {
+      color: var(--cyan);
+      display: inline;
+      text-shadow: 0 0 12px rgba(22,101,52,0.8), 0 0 24px rgba(22,101,52,0.4);
+      animation: titlePulse 2s 0.8s ease-in-out infinite, titleReveal 0.5s 0.3s ease-out forwards;
+      opacity: 0;
+    }
+    .title-glitch-line {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      animation: lineExpand 0.8s 0.5s ease-out forwards;
+      border-radius: 2px;
+    }
+    @keyframes titleReveal {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes titlePulse {
+      0%, 100% { text-shadow: 0 0 12px rgba(22,101,52,0.8), 0 0 24px rgba(22,101,52,0.4); }
+      50% { text-shadow: 0 0 20px rgba(22,101,52,1), 0 0 40px rgba(22,101,52,0.7), 0 0 60px rgba(22,101,52,0.3); }
+    }
+    @keyframes lineExpand {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    .hero-badge {
+      animation: badgeFade 0.5s 0.6s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes badgeFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     .hero-badge {
       display: inline-block;
       font-family: 'JetBrains Mono', monospace;
@@ -916,7 +977,11 @@
 <!-- HERO -->
 <div class="hero">
   <div>
-    <div class="hero-badge">// AVAILABLE FOR HIRE</div>
+    <div class="hero-animated-title" aria-hidden="true">
+  <span class="title-scott">Scotts</span><span class="title-tech">Tech</span><span class="title-x">X</span>
+  <div class="title-glitch-line"></div>
+</div>
+<div class="hero-badge">// AVAILABLE FOR HIRE</div>
     <h1>
       I Build<br>
       <span class="accent">Cybersecurity Tools</span><br>

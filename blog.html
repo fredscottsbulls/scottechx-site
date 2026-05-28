@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — ScottsTechX</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0a0a0f; --surface: #12121a; --border: #1e1e2e; --cyan: #00e5ff; --cyan-dim: #00b8cc; --blue: #0080ff; --purple: #a855f7; --text: #e2e8f0; --text-muted: #64748b; --green: #10b981; --red: #ef4444; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+    .grid-bg { position: fixed; inset: 0; background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--cyan); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+    .nav-links a.cta-btn { color: var(--bg); background: var(--cyan); padding: 0.4rem 1rem; border-radius: 6px; font-weight: 600; }
+    .nav-links a.cta-btn:hover { background: var(--cyan-dim); }
+    .page-hero { position: relative; padding: 10rem 2rem 4rem; text-align: center; z-index: 1; }
+    .page-hero::before { content: ''; position: absolute; top: 15%; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%); pointer-events: none; }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--cyan); letter-spacing: 0.1em; margin-bottom: 1rem; }
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -1.5px; margin-bottom: 1rem; }
+    h1 .accent { color: var(--cyan); }
+    .page-desc { font-size: 1.125rem; color: var(--text-muted); max-width: 560px; margin: 0 auto 3rem; }
+    .content { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+    .blog-grid { display: grid; gap: 1.5rem; margin-bottom: 3rem; }
+    .blog-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.8rem; display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem; align-items: center; transition: border-color 0.2s; cursor: pointer; text-decoration: none; }
+    .blog-card:hover { border-color: var(--cyan); }
+    @media (max-width: 700px) { .blog-card { grid-template-columns: 1fr; } }
+    .blog-thumb { width: 80px; height: 80px; background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(168,85,247,0.15)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+    .blog-info h3 { font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--text); }
+    .blog-info p { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 0.6rem; }
+    .blog-meta { display: flex; gap: 1rem; align-items: center; }
+    .blog-date { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+    .blog-tags { display: flex; gap: 0.4rem; }
+    .blog-tag { background: rgba(0,229,255,0.08); color: var(--cyan); font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+    .blog-tag.sec { background: rgba(168,85,247,0.1); color: var(--purple); }
+    .blog-tag.dev { background: rgba(16,185,129,0.1); color: var(--green); }
+    .blog-arrow { color: var(--text-muted); font-size: 1.2rem; transition: color 0.2s; }
+    .blog-card:hover .blog-arrow { color: var(--cyan); }
+    .newsletter-box { background: linear-gradient(135deg, rgba(0,229,255,0.06), rgba(168,85,247,0.06)); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; text-align: center; margin-bottom: 3rem; }
+    .newsletter-box h3 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+    .newsletter-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .newsletter-box a { display: inline-block; background: var(--cyan); color: var(--bg); padding: 0.7rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .newsletter-box a:hover { background: var(--cyan-dim); }
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; }
+    .footer-links { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1rem; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; }
+    .footer-links a:hover { color: var(--cyan); }
+    .footer-copy { color: var(--text-muted); font-size: 0.8rem; }
+    @media (max-width: 600px) { .nav-links { gap: 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <nav>
+    <a href="index.html" class="nav-logo">Scotts<span>TechX</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="blog.html" class="active">Blog</a></li>
+      <li><a href="index.html#contact" class="cta-btn">Hire Me</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="section-label">// BLOG</div>
+    <h1>Latest <span class="accent">Writing</span></h1>
+    <p class="page-desc">Deep-dives on cybersecurity, full-stack development, and building in the open.</p>
+  </div>
+
+  <div class="content">
+    <div class="newsletter-box">
+      <h3>Stay in the loop</h3>
+      <p>New articles on security research, tool releases, and development tutorials — straight to your feed.</p>
+      <a href="https://dev.to/fredscottsbulls" target="_blank">Follow on Dev.to →</a>
+    </div>
+
+    <div class="blog-grid">
+      <a href="https://dev.to/fredscottsbulls/how-i-built-a-telegram-bot-that-monitors-my-server-in-real-time-f5n" target="_blank" class="blog-card">
+        <div class="blog-thumb">🤖</div>
+        <div class="blog-info">
+          <h3>How I Built a Telegram Bot That Monitors My Server in Real-Time</h3>
+          <p>Building a Python Telegram bot with psutil that tracks CPU, RAM, disk, and uptime — with instant alerts when thresholds are crossed.</p>
+          <div class="blog-meta">
+            <span class="blog-date">May 2026</span>
+            <div class="blog-tags">
+              <span class="blog-tag dev">Python</span>
+              <span class="blog-tag dev">Telegram</span>
+              <span class="blog-tag dev">DevOps</span>
+            </div>
+          </div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </a>
+
+      <a href="https://dev.to/fredscottsbulls/building-your-own-cybersecurity-toolkit-20-essential-tools-in-2026-195g" target="_blank" class="blog-card">
+        <div class="blog-thumb">🛡️</div>
+        <div class="blog-info">
+          <h3>Building Your Own Cybersecurity Toolkit: 20 Essential Tools in 2026</h3>
+          <p>The definitive guide to the modern hacker or security researcher's workstation — from recon to exploitation to reporting.</p>
+          <div class="blog-meta">
+            <span class="blog-date">May 2026</span>
+            <div class="blog-tags">
+              <span class="blog-tag sec">Security</span>
+              <span class="blog-tag sec">Tools</span>
+              <span class="blog-tag sec">Pentest</span>
+            </div>
+          </div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </a>
+
+      <a href="https://dev.to/fredscottsbulls/how-i-built-a-custom-programming-language-interpreter-in-python-2j7f" target="_blank" class="blog-card">
+        <div class="blog-thumb">⚡</div>
+        <div class="blog-info">
+          <h3>How I Built a Custom Programming Language Interpreter in Python</h3>
+          <p>Walking through lexing, parsing, and evaluation — building a simple but functional interpreter from scratch in pure Python.</p>
+          <div class="blog-meta">
+            <span class="blog-date">May 2026</span>
+            <div class="blog-tags">
+              <span class="blog-tag dev">Python</span>
+              <span class="blog-tag dev">Compilers</span>
+              <span class="blog-tag dev">CS</span>
+            </div>
+          </div>
+        </div>
+        <div class="blog-arrow">→</div>
+      </a>
+    </div>
+
+    <div class="newsletter-box">
+      <h3>More coming soon</h3>
+      <p>Articles on cloud security, advanced pentesting, and building your own C2 framework are in the pipeline.</p>
+      <a href="https://github.com/fredscottsbulls" target="_blank">Check GitHub for tools →</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://github.com/fredscottsbulls" target="_blank">GitHub</a>
+      <a href="https://dev.to/fredscottsbulls" target="_blank">Dev.to</a>
+      <a href="https://t.me/scottechx" target="_blank">Telegram</a>
+      <a href="mailto:fredscottsbulls@gmail.com">Email</a>
+    </div>
+    <p class="footer-copy">© 2026 <span>ScottsTechX</span> — Built with purpose.</p>
+  </footer>
+</body>
+</html>
